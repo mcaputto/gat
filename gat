@@ -1,0 +1,41 @@
+#!/usr/bin/env python3
+
+import argparse
+import datetime
+import os
+
+parser = argparse.ArgumentParser(
+    description='Create a new Gatsby blog post'
+    )
+parser.add_argument(
+    "title",
+    help="Title for the new blog post",
+    type=str,
+    )
+args = parser.parse_args()
+
+now = datetime.datetime.now()
+now = str(now)
+directory = 'src/pages/' + now[0:10] + '-' + args.title
+filepath = directory + '/index.md'
+
+contents = (
+    f"---\n"
+    f"title: {args.title}\n"
+    f"date: \"{now}\"\n"
+    f"path: \"/{args.title}/\"\n"
+    f"---\n"
+    f"\n"
+    f"\n"
+    )
+
+if os.path.exists('src/pages'):
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+        with open(filepath, 'w') as f:
+            f.write(contents)
+        print('Created ' + filepath)
+    else:
+        print('Blog post already exists!')
+else:
+    print('src/pages does not exist!')
